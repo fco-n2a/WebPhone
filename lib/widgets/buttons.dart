@@ -1,21 +1,25 @@
+import 'package:callinteligence/data/actions_list.dart';
 import 'package:callinteligence/theme/light_theme.dart';
 import 'package:callinteligence/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
 class MainButton extends StatelessWidget {
-  MainButton(
-      {super.key,
-      required this.width,
-      required this.height,
-      required this.fontSize,
-      required this.text,
-      required this.action});
+  MainButton({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.fontSize,
+    required this.text,
+    required this.action,
+    this.isEnabled = true,
+  });
   final double width;
   final double height;
   final double fontSize;
   final String text;
   final Function action;
+  final bool isEnabled;
   final LightTheme _lightTheme = LightTheme();
   @override
   Widget build(BuildContext context) {
@@ -29,10 +33,14 @@ class MainButton extends StatelessWidget {
         hoverElevation: 0,
         disabledElevation: 0,
         highlightElevation: 0,
-        backgroundColor: _lightTheme.secondaryAccentColor,
-        onPressed: () async {
-          await action();
-        },
+        backgroundColor: isEnabled
+            ? _lightTheme.secondaryAccentColor
+            : _lightTheme.greyColor,
+        onPressed: isEnabled
+            ? () async {
+                await action();
+              }
+            : null,
         child: Text(
           text,
           style: TextStyle(
@@ -198,12 +206,14 @@ class Button extends StatelessWidget {
       required this.height,
       required this.content,
       required this.action,
-      required this.color});
+      required this.color,
+      this.isEnabled = true});
   final double width;
   final double height;
   final Widget content;
   final Function action;
   final Color color;
+  final bool isEnabled;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -216,10 +226,12 @@ class Button extends StatelessWidget {
         hoverElevation: 0,
         disabledElevation: 0,
         highlightElevation: 0,
-        backgroundColor: color,
-        onPressed: () async {
-          await action();
-        },
+        backgroundColor: isEnabled ? color : lightTheme.greyColor,
+        onPressed: isEnabled
+            ? () async {
+                await action();
+              }
+            : () {},
         child: content,
       ),
     );
@@ -263,7 +275,7 @@ class SizedIconButton extends StatelessWidget {
         splashColor: color,
         splashRadius: 0.1,
         style: ButtonStyle(
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),

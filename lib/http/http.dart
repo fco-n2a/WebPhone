@@ -1,4 +1,4 @@
-import 'package:callinteligence/http/http_response.dart';
+import 'package:callinteligence/model/http_response.dart';
 import 'package:callinteligence/utils/logs.dart';
 import 'package:dio/dio.dart';
 
@@ -11,13 +11,15 @@ class Http {
   Future<HttpResponse<T>> request<T>(String path,
       {Map<String, dynamic>? headers,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? data,
+      dynamic data,
       String method = "GET",
+      bool formDataParsed = true,
       T Function(dynamic data)? parser}) async {
     try {
       Response response = await _dio.request(
         path,
-        options: Options(headers: headers, method: method),
+        options:
+            Options(headers: headers, method: method, preserveHeaderCase: true),
         queryParameters: queryParameters,
         data: data,
       );
